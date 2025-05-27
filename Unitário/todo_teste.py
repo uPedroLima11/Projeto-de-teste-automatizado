@@ -1,5 +1,5 @@
 import unittest
-from todo import ListaDeTarefas
+from Unitário.todo import ListaDeTarefas
 
 class TesteListaDeTarefas(unittest.TestCase):
     def setUp(self):
