@@ -38,9 +38,7 @@ class TestOrangeHRM(unittest.TestCase):
     def test_02_navegacao_menu_admin(self):
         try:
             self.driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
-            username_input = self.wait.until(
-                EC.presence_of_element_located((By.NAME, "username"))
-            )
+            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys("Admin")
 
             password_input = self.driver.find_element(By.NAME, "password")
@@ -49,46 +47,30 @@ class TestOrangeHRM(unittest.TestCase):
             login_button = self.driver.find_element(By.CSS_SELECTOR, "[type='submit']")
             login_button.click()
 
-            self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-topbar-header-breadcrumb h6"))
-            )
+            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-topbar-header-breadcrumb h6")))
 
-            admin_menu = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, "//span[text()='Admin']"))
-            )
+            admin_menu = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Admin']")))
             admin_menu.click()
 
-            admin_header = self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-topbar-header-breadcrumb h6"))
-            )
+            admin_header = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-topbar-header-breadcrumb h6")))
 
-            self.assertIn("Admin", admin_header.text,
-                          "Texto 'Admin' não encontrado no cabeçalho")
-            self.assertIn("admin", self.driver.current_url.lower(),
-                          "URL não contém 'admin'")
+            self.assertIn("Admin", admin_header.text,"Texto 'Admin' não encontrado no cabeçalho")
+            self.assertIn("admin", self.driver.current_url.lower(),"URL não contém 'admin'")
 
-            users_table = self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-table"))
-            )
-            self.assertTrue(users_table.is_displayed(),
-                            "Tabela de usuários não está visível")
+            users_table = self.wait.until( EC.presence_of_element_located((By.CSS_SELECTOR, ".oxd-table")))
+            self.assertTrue(users_table.is_displayed(),"Tabela de usuários não está visível")
 
             table_rows = self.driver.find_elements(By.CSS_SELECTOR, ".oxd-table-body .oxd-table-row")
-            self.assertGreater(len(table_rows), 0,
-                               "Nenhum usuário encontrado na tabela")
+            self.assertGreater(len(table_rows), 0,"Nenhum usuário encontrado na tabela")
 
             add_button = self.driver.find_element(By.CSS_SELECTOR, ".oxd-button--secondary")
-            self.assertTrue(add_button.is_displayed(),
-                            "Botão 'Add' não está visível")
+            self.assertTrue(add_button.is_displayed(),"Botão 'Add' não está visível")
 
             search_section = self.driver.find_element(By.CSS_SELECTOR, ".oxd-form")
-            self.assertTrue(search_section.is_displayed(),
-                            "Seção de busca não está visível")
+            self.assertTrue(search_section.is_displayed(),"Seção de busca não está visível")
 
             print("✅ Teste de navegação no menu Admin passou!")
 
-        except selenium.TimeoutException:
-            self.fail("Timeout: Elementos da página Admin não foram encontrados")
         except Exception as e:
             self.fail(f"Erro inesperado durante o teste de navegação: {str(e)}")
 
@@ -97,9 +79,11 @@ class TestOrangeHRM(unittest.TestCase):
             self.driver.quit()
 
 class TestSuiteOrangeHRM:
-    def rodar_testes(self):
+    @staticmethod
+    def rodar_testes():
         suite = unittest.TestSuite()
         suite.addTest(TestOrangeHRM('test_01_login_valido'))
+        suite.addTest(TestOrangeHRM('test_02_navegacao_menu_admin'))
 
         runner = unittest.TextTestRunner(verbosity=2)
         result = runner.run(suite)
